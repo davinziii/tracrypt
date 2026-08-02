@@ -21,7 +21,7 @@ export default function Home() {
 	return (
 		<div className='flex items-center justify-center w-full h-120'>
 			<div className='w-150'>
-				<SearchBar onSearch={handleSearch} tokenAddress={DEFAULT_TOKEN}/>
+				<SearchBar onSearch={handleSearch}/>
 			</div>
 		</div>
 	)
