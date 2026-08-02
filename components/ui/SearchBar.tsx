@@ -200,7 +200,7 @@ export default function SearchBar({onSearch}: SearchBarProps) {
                         No results found
                     </div>
                 ) : 
-                    <div className="flex items-center justify-center h-full text-zinc-500 text-3xl font-mono">
+                    <div className="flex items-center justify-center h-full text-zinc-500 text-xl font-mono">
                         Search contract address, name, or ticker!
                     </div>
                 }
