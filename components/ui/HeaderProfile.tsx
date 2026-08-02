@@ -50,7 +50,7 @@ export default function HeaderProfile({profileImage, tokenAddress, accountAddres
                         <div className="flex items-center gap-x-2">
                             {linksSocial.map((social) => (
                                 <a key={social.name}
-                                href={social.url ? `${social.url}${accountAddress}` : undefined}
+                                href={social.url ? `${social.url}${accountAddress}` : social.name === "X" ? `https://x.com/search?q=%24${tokenAddress}&src=typed_query&f=live` : undefined}
                                 target={social.url ? "_blank" : undefined}
                                 rel={social.url ? "noreferrer" : undefined}
                                 className="flex items-center justify-center p-2 shrink-0 transition-colors hover:bg-zinc-800
@@ -75,7 +75,7 @@ export default function HeaderProfile({profileImage, tokenAddress, accountAddres
                             <Image src={link.image} alt="" className="w-3 h-3"/>
                             <p className="text-[10px] font-sans font-extralight tracking-tight opacity-80 md:text-xs">{link.name}</p>
                         </a>
-                    ))}
+                    ))}s
                 </div>
             </div>
         </div>
