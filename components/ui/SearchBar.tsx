@@ -138,7 +138,7 @@ export default function SearchBar({onSearch}: SearchBarProps) {
             } finally {
                 setLoadingSuggestions(false)
             }
-        }, 300)
+        }, 200)
 
         return () => clearTimeout(timeoutId)
     }, [inputValue])
@@ -206,7 +206,11 @@ export default function SearchBar({onSearch}: SearchBarProps) {
                                 placeholder="Search contract address, name, or ticker" 
                                 value={inputValue} 
                                 onChange={(e) => setInputValue(e.target.value)}/>
-                            <button type="submit">Search</button>
+                            <button 
+                                type="submit" 
+                                disabled={!isValidSolanaAddress(inputValue.trim()) && suggestions.length === 0}>
+                                Search
+                            </button>
                         </div>
                     </form>
                 </div>
