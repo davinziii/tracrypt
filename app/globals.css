@@ -24,3 +24,66 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@keyframes bounce-text {
+  0%, 100% {
+    opacity: 100%;
+    transform: translateX(0);
+  }
+  50% {
+    opacity: 70%;
+    transform: translateX(-4px);
+  }
+}
+
+@keyframes modalIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes modalOut {
+    from {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.95) translateY(-4px);
+    }
+}
+
+@keyframes overlayIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes overlayOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+.animate-modal-in {
+    animation: modalIn 500ms ease-out forwards;
+}
+
+.animate-modal-out {
+    animation: modalOut 200ms ease-in forwards;
+}
+
+.animate-overlay-in {
+    animation: overlayIn 500ms ease-out forwards;
+}
+
+.animate-overlay-out {
+    animation: overlayOut 200ms ease-in forwards;
+}
+
+.animate-bounce-text {
+  animation: bounce-text 0.5s ease-in-out infinite;
+}
