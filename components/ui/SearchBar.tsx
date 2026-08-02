@@ -23,6 +23,7 @@ interface DexScreenerPair {
     priceChange?: { h24?: number }
     pairCreatedAt?: number
     info?: { imageUrl?: string }
+    liquidity?: { usd?: number }
 }
 
 export default function SearchBar({onSearch}: SearchBarProps) {
@@ -34,6 +35,25 @@ export default function SearchBar({onSearch}: SearchBarProps) {
 
     const modalRef = useRef<HTMLDivElement>(null)
     const inputRef = useRef<HTMLInputElement>(null)
+
+    const isValidSolanaAddress = (value: string): boolean => {
+        const base58Regex = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/
+
+        return base58Regex.test(value)
+    }
+
+    const getRelevanceScore = (pair: DexScreenerPair, query: string): number => {
+        const symbol = pair?.baseToken?.symbol?.toLowerCase() ?? ''
+        const name = pair?.baseToken?.name?.toLowerCase() ?? ''
+        const q = query.toLowerCase()
+
+        if (symbol === q) return 3          // exact symbol match — best
+        if (name === q) return 3            // exact name match — best
+        if (symbol.startsWith(q)) return 2  // symbol starts with query
+        if (name.startsWith(q)) return 2    // name starts with query
+        if (symbol.includes(q) || name.includes(q)) return 1  // contains query somewhere
+        return 0
+    }
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -77,6 +97,7 @@ export default function SearchBar({onSearch}: SearchBarProps) {
                     setSuggestions([])
                     return
                 }
+
                 const data = await res.json()
                 const solanaPairs: DexScreenerPair[] = data?.pairs?.filter((pair: DexScreenerPair) => pair.chainId === 'solana') ?? []
 
@@ -87,18 +108,28 @@ export default function SearchBar({onSearch}: SearchBarProps) {
                     if (!tokenAddress) continue
 
                     const existing = dedupedMap.get(tokenAddress)
-                    const currentMarketCap = pair?.marketCap ?? 0
-                    const existingMarketCap = existing?.marketCap ?? 0
+                    const currentLiquidity = pair?.liquidity?.usd ?? 0
+                    const existingLiquidity = existing?.liquidity?.usd ?? 0
 
-                    if (!existing || currentMarketCap > existingMarketCap) {
+                    if (!existing || currentLiquidity > existingLiquidity) {
                         dedupedMap.set(tokenAddress, pair)
                     }
                 }
 
                 // Sort by market cap, highest first
-                const sorted = Array.from(dedupedMap.values()).sort(
-                    (a, b) => (b?.marketCap ?? 0) - (a?.marketCap ?? 0)
-                )
+                const sorted = Array.from(dedupedMap.values()).sort((a, b) => {
+                    const relevanceA = getRelevanceScore(a, query)
+                    const relevanceB = getRelevanceScore(b, query)
+
+                    if (relevanceB !== relevanceA) {
+                        return relevanceB - relevanceA  // higher relevance first
+                    }
+
+                    // same relevance tier → sort by liquidity
+                    const liquidityA = a?.liquidity?.usd ?? 0
+                    const liquidityB = b?.liquidity?.usd ?? 0
+                    return liquidityB - liquidityA
+                })
 
                 setSuggestions(sorted.slice(0, 8)) // cap at 8 after dedupe + sort
             } catch (err) {
@@ -116,9 +147,17 @@ export default function SearchBar({onSearch}: SearchBarProps) {
         e.preventDefault();
         const cleanAddress = inputValue.trim();
         
-        if (cleanAddress) {
-            onSearch(cleanAddress); // <-- 2. Call the parent function here!
+        if (isValidSolanaAddress(cleanAddress)) {
+            onSearch(cleanAddress)
             setOpenModal(false)
+        } else if (suggestions.length > 0) {
+            // Not a valid address, but we have suggestions — use the top result
+            const topSuggestion = suggestions[0]?.baseToken?.address
+
+            if (topSuggestion) {
+                onSearch(topSuggestion)
+                setOpenModal(false)
+            }
         }
 
     };
