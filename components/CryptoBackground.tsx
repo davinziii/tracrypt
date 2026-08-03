@@ -160,8 +160,7 @@ export default function CryptoBackground() {
 							'--h2': c.h2.toFixed(2),
 							animationDuration: `${c.duration.toFixed(1)}s`,
 							animationDelay: `${c.delay.toFixed(1)}s`,
-						}}
-					/>
+						}}/>
 				))}
 			</div>
 

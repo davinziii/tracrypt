@@ -1,5 +1,7 @@
 import { formatCompactNumber } from "@/utils/formatters";
 import { useState } from "react";
+import { usePriceHistory, MAX_POINTS, POLL_INTERVAL_MS } from "@/hooks/usePriceHistory";
+import Sparkline from "./Sparklines";
 
 type StatItem = {
     label: number | string;
@@ -10,10 +12,13 @@ type StatItem = {
 };
 
 type CryptoVolumeStatsProps = {
-  dataStats: StatItem[]; 
+  	dataStats: StatItem[]; 
+    symbol: string;
+    name: string;
+    priceUsd: number | string;
 };
 
-export default function CryptoVolumeStats({dataStats}: CryptoVolumeStatsProps) {
+export default function CryptoVolumeStats({dataStats, symbol, name, priceUsd}: CryptoVolumeStatsProps) {
 	const [selectedLabel, setSelectedLabel] = useState(dataStats[0]?.label);
 	const selectedStat = dataStats.find((d) => d.label === selectedLabel) ?? dataStats[0];
 
@@ -21,9 +26,30 @@ export default function CryptoVolumeStats({dataStats}: CryptoVolumeStatsProps) {
 	const totalTxns = buyCount + sellCount;
 	const buyPercent = totalTxns > 0 ? (buyCount / totalTxns) * 100 : 0;
 	const sellPercent = buyPercent === 0 ? 0 : 100 - buyPercent;
+    const priceHistory = usePriceHistory(priceUsd ? Number(priceUsd) : undefined);
+
+	const totalMs = MAX_POINTS * POLL_INTERVAL_MS;
+	const totalMinutes = Math.round(totalMs / 60000);
+
+	const timeframeLabel =
+		totalMinutes < 60
+			? `${totalMinutes}m`
+			: `${(totalMinutes / 60).toFixed(totalMinutes % 60 === 0 ? 0 : 1)}h`;
 
 	return (
 		<div className="grid grid-cols-4 gap-3 text-center">
+			<div className="flex items-center col-span-4 gap-2 rounded-xl">
+				<div className="flex items-center gap-2">
+					<div>
+						<h1 className="font-semibold font-sans text-2xl tracking-tight">{symbol}</h1>
+						<p className="text-xs uppercase tracking-tight font-mono text-zinc-500">{name}</p>
+					</div>
+					<div className="flex flex-col ml-auto">
+						<Sparkline data={priceHistory} />
+						<p className="text-[10px] mt-2font-mono text-zinc-500">Last {timeframeLabel}</p>
+					</div>
+				</div>
+			</div>
 			{dataStats.map((data) => (
 			<button onClick={() => setSelectedLabel(data.label)} key={data.label} className={`col-span-2 rounded-xl uppercase font-mono p-3 border cursor-pointer transition-colors hover:bg-zinc-600/30
 				md:col-span-1 lg:col-span-2
@@ -41,22 +67,18 @@ export default function CryptoVolumeStats({dataStats}: CryptoVolumeStatsProps) {
 				<div className="grid grid-cols-2 mb-4 justify-between text-xs font-mono text-zinc-400">
 					<span className="">Buy/sell ratio <br></br> ({selectedLabel})</span>
 					<div className="flex items-center justify-center">
-						<span className="flex flex-col text-left w-fit">
-							<span className="relative">
-								buy
-								<span className={`absolute -right-6 inline-block transition-all 
-								${buyPercent <= sellPercent && String(buyCount).length >= 4 ? "left-8" : ""}
-								${buyPercent > sellPercent ? "animate-bounce-text -top-2 -right-13 text-emerald-300 text-lg": "text-emerald-400"} 
-								${buyPercent > sellPercent && String(buyCount).length <= 2 ? "left-10": buyPercent > sellPercent && String(buyCount).length <= 3 ? "left-9" : ""}`}>
+						<span className="grid grid-cols-2 gap-2 w-fit h-8">
+							<span className="flex flex-col gap-1 uppercase font-mono text-left">
+								<span>Buy</span>
+								<span>Sell</span>
+							</span>
+							<span className="flex flex-col relative gap-1 uppercase font-mono text-right text-md">
+								<span className={`transition-all
+								${buyPercent > sellPercent ? "animate-bounce-text text-emerald-300" : "text-emerald-400"}`}>
 								{buyCount}
 								</span>
-							</span>
-							<span className="relative mt-2">
-								sell
-								<span className={`absolute -right-7 inline-block transition-all 
-								${sellPercent <= buyPercent && String(sellCount).length >= 4 ? "left-9" : ""}
-								${sellPercent > buyPercent ? "animate-bounce-text -top-2 left-10 text-red-400 text-lg": "text-red-400"}
-								${sellPercent > buyPercent && String(sellCount).length <= 2 ? "left-10": sellPercent > buyPercent && String(sellCount).length <= 3 ? "left-9" : ""}`}>
+								<span className={`transition-all
+								${sellPercent > buyPercent ? "animate-bounce-text text-red-400": "text-red-400"}`}>
 								{sellCount}
 								</span>
 							</span>
@@ -66,7 +88,7 @@ export default function CryptoVolumeStats({dataStats}: CryptoVolumeStatsProps) {
 				<div className="flex h-2 overflow-hidden rounded">
 					<div className="bg-green-600" style={{ width: `${buyPercent}%` }}/>
 					<div className="bg-red-500" style={{ width: `${sellPercent}%` }}/>
-					{sellPercent === 0 ? <div className="bg-zinc-400 w-full"/> : null}
+					{sellPercent === 0 && buyPercent === 0 ? <div className="bg-zinc-400 w-full"/> : null}
 				</div>
 			</div>
 			

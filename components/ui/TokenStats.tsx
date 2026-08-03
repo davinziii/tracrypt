@@ -11,8 +11,8 @@ type TokenStatsProps = {
 export default function TokenStats({priceUsd, priceNative, marketCap, fdv, symbol}: TokenStatsProps) {
 
     const stats = [
-        { name: "Price", price: priceNative, currency: symbol},
         { name: "Price USD", price: priceUsd, currency: "USD"},
+        { name: "Price", price: priceNative, currency: symbol},
         { name: "Market Cap", price: marketCap, currency: "USD"},
         { name: "FDV", price: fdv, currency: "USD"}
     ]

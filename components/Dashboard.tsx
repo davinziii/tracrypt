@@ -83,7 +83,7 @@ export default function Dashboard() {
                 <MarketChart tokenAddress={tokenAddress} />
             </div>
             <div className="grid flex-col col-span-4 gap-4 lg:col-span-1">
-                <CryptoVolumeStats dataStats={volumeStats}/>
+                <CryptoVolumeStats dataStats={volumeStats} symbol={pairData?.baseToken.symbol} name={pairData?.baseToken.name} priceUsd={pairData?.priceUsd} />
                 <CryptoStats dataStats={rugcheckStats} />
             </div>
         </div>

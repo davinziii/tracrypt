@@ -30,6 +30,7 @@ export function useTokenData(tokenAddress: string) {
                 const dexData = await dexRes.json()
                 let chainId: string | null = null
                 
+                console.log(dexData)
                 if (cancelled) return
 
                 if (dexData.pairs && dexData.pairs.length > 0) {
@@ -83,7 +84,7 @@ export function useTokenData(tokenAddress: string) {
         }
 
         fetchTokenData(true) // initial load with loading state
-        const intervalId = setInterval(() => fetchTokenData(false), 2000)
+        const intervalId = setInterval(() => fetchTokenData(false), 10000)
 
         return () => {
             cancelled = true

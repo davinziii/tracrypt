@@ -34,7 +34,7 @@ export default function HeaderProfile({profileImage, tokenAddress, accountAddres
                     <div className="flex flex-col items-start gap-2">
                         <div>
                             <h1 className="flex font-semibold font-sans text-2xl tracking-tight">
-                                {symbol}
+                                ${symbol}
                             </h1>
                             <p className="text-xs uppercase tracking-tight font-mono text-zinc-500">
                                 {name}

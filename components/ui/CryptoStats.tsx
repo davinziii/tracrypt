@@ -7,13 +7,15 @@ type StatItem = {
 };
 
 type CryptoStatsProps = {
-  dataStats: StatItem[]; 
+    dataStats: StatItem[]; 
 };
 
 export default function CryptoStats({dataStats}: CryptoStatsProps) {
 
+
     return (
         <div className="grid grid-cols-3 grid-rows-4 gap-2 w-full rounded-xl">
+            
             {dataStats.map((data) => (
                 <div key={data.label}
                 className={`flex flex-col items-center justify-center p-3 text-center rounded-xl border transition-colors 
