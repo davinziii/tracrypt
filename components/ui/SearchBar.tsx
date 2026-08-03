@@ -168,7 +168,7 @@ export default function SearchBar({onSearch}: SearchBarProps) {
                 flex justify-between 
                 w-full h-10 px-3.5 py-2.5
                 text-xs 
-                border rounded-xl placeholder-[#50627c] border-zinc-800 outline-none
+                border rounded-xl placeholder-[#50627c] border-zinc-700 outline-none
                 transition-colors 
                 focus:ring-1 focus:ring-emerald-500/90 hover:border hover:border-emerald-500/90">
                 <div className="flex items-center w-full">
@@ -186,7 +186,7 @@ export default function SearchBar({onSearch}: SearchBarProps) {
             <div onClick={() => setOpenModal(false)} className={` inset-0 bg-black/30 backdrop-blur-sm z-40 ${openModal ? "fixed animate-overlay-in pointer-events-auto " : "animate-overlay-out pointer-events-none"}`} />
             {/* Modal */}
             <div ref={modalRef} role="dialog" aria-modal="true" aria-label="Token search results" className={`
-                absolute z-50 flex-col gap-1 w-full h-100 border border-zinc-500/50 bg-black rounded-2xl 
+                absolute z-50 flex-col gap-1 w-full h-100 border border-zinc-700 bg-black rounded-2xl 
                 transition-all duration-100 ease-in-out overflow-y-auto
                 ${openModal ? "flex animate-overlay-in pointer-events-auto" : "animate-overlay-out pointer-events-none"}`}>
                 <div className="sticky top-0 z-10 pt-5 px-5 bg-black">

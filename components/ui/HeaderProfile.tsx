@@ -25,12 +25,11 @@ export default function HeaderProfile({profileImage, tokenAddress, accountAddres
     
     return (
         <div className="flex flex-col gap-4">
-            <div className="grid grid-cols-1 items-center gap-4 xl:grid-cols-2">
+            <div className="grid grid-cols-1 items-center justify-center gap-4 xl:grid-cols-2">
                 <div className="flex items-center gap-4 justify-center sm:justify-start">
                     <img src={profileImage}
                         alt="Token Logo"
-                        className="aspect-square h-30 rounded-xl object-cover shrink-0"
-                    />
+                        className="aspect-square h-30 rounded-xl object-cover shrink-0"/>
                     {/* Name and Symbol of Memecoin */}
                     <div className="flex flex-col items-start gap-2">
                         <div>
@@ -58,24 +57,23 @@ export default function HeaderProfile({profileImage, tokenAddress, accountAddres
                                 <Image
                                 src={social.image}
                                 alt={`${social.name} logo`}
-                                className={`w-4 h-full shrink-0 ${social.invert ? "invert" : ""} sm:w-3`}
-                                />
+                                className={`w-4 h-full shrink-0 ${social.invert ? "invert" : ""} sm:w-3`}/>
                             </a>
                             ))}
                         </div>
                     </div>
                 </div>
-                <div className="grid grid-cols-2 gap-1 xl:col-span-1 md:gap-4">
+                <div className="grid grid-cols-2 gap-1 justify-center xl:col-span-1 md:gap-4">
                     {linksToken.map((link) => (
                         <a key={link.name} 
                         href={`${link.url}${tokenAddress}`} 
                         target="_blank"
                         rel="noreferrer"
-                        className="flex items-center justify-center py-3 gap-2 rounded-xl border-zinc-800 border transition-colors hover:bg-zinc-800">
+                        className="flex items-center justify-center py-3 gap-2 rounded-xl border-zinc-700 border transition-colors hover:bg-zinc-800">
                             <Image src={link.image} alt="" className="w-3 h-3"/>
                             <p className="text-[10px] font-sans font-extralight tracking-tight opacity-80 md:text-xs">{link.name}</p>
                         </a>
-                    ))}s
+                    ))}
                 </div>
             </div>
         </div>

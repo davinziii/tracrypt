@@ -23,15 +23,15 @@ export default function TokenStats({priceUsd, priceNative, marketCap, fdv, symbo
             md:divide-y md:divide-x md:grid-cols-2 xl:grid-cols-4">
         {stats.map((stat) => (
             <div key={stat.name} className="flex flex-col items-center justify-center p-3 text-center md:p-5">
-            <h2 className="font-mono text-[8px] tracking-tight uppercase text-zinc-400 md:text-xs">
-                {stat.name}
-            </h2>
-            <p className="font-mono font-semibold text-xs md:text-xl lg:text-2xl tracking-tight">
-                {formatSmallPrice(stat.price)}
-                <span className="text-[8px] ml-1 text-zinc-500 font-normal md:text-xs">
-                {stat.currency}
-                </span>
-            </p>
+                <h2 className="font-mono text-[8px] tracking-tight uppercase text-zinc-400 md:text-xs">
+                    {stat.name}
+                </h2>
+                <p className="font-mono font-semibold text-xs md:text-xl lg:text-2xl tracking-tight">
+                    {formatSmallPrice(stat.price)}
+                    <span className="text-[8px] ml-1 text-zinc-500 font-normal md:text-xs">
+                    {stat.currency}
+                    </span>
+                </p>
             </div>
         ))}
         </div>

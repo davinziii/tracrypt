@@ -152,8 +152,7 @@ export default function CryptoBackground() {
 		<div className="crypto-bg fixed inset-0 -z-10 overflow-hidden">
 			<div className="candles absolute inset-0 flex items-end justify-between px-[2%] opacity-50">
 				{candles.map((c) => (
-					<div
-						key={c.id}
+					<div key={c.id}
 						className={`candle w-[1.6%] rounded-t-[2px] h-[70%] ${c.down ? 'down' : ''}`}
 						style={{
 							// @ts-expect-error custom properties
